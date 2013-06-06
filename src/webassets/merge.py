@@ -15,6 +15,8 @@ from webassets.six.moves import filter
 
 from .utils import cmp_debug_levels, StringIO
 
+import codecs
+
 
 __all__ = ('FileHunk', 'MemoryHunk', 'merge', 'FilterTool',
            'MoreThanOneFilterError', 'NoFilters')
@@ -56,7 +58,7 @@ class BaseHunk(object):
         raise NotImplementedError()
 
     def save(self, filename):
-        with open(filename, 'w') as f:
+        with codecs.open(filename, 'w', 'utf-8') as f:
             f.write(self.data())
 
 
