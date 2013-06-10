@@ -480,7 +480,19 @@ class ExternalTool(six.with_metaclass(ExternalToolMetaclass, Filter)):
                     raise ValueError(
                         '{input} placeholder given, but no data passed')
                 with os.fdopen(input_file.fd, 'w') as f:
-                    f.write(data.read() if hasattr(data, 'read') else data)
+                    if hasattr(data, 'read'):
+                        buf = data.read()
+                    else:
+                        buf = data
+
+                    try:
+                        if type(buf) is unicode:  # NameError occourd here when python 3
+                            f.write(buf.encode('utf-8'))
+                        else:
+                            f.write(buf)
+                    except NameError:
+                        f.write(buf)  # if python 3
+
                     # No longer pass to stdin
                     data = None
 
