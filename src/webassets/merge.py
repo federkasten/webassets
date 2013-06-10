@@ -140,7 +140,10 @@ class MemoryHunk(BaseHunk):
 
     def __init__(self, data, files=None):
         if type(data) is str:
-            self._data = unicode(data, encoding='utf-8')
+            try:
+                self._data = unicode(data, encoding='utf-8')  # if python2
+            except NameError:
+                self._data = data  # if python 3
         else:
             self._data = data
         self.files = files or []
@@ -161,7 +164,10 @@ class MemoryHunk(BaseHunk):
         if hasattr(self._data, 'read'):
             buf = self._data.read()
             if type(buf) is str:
-                return unicode(buf, encoding='utf-8')
+                try:
+                    return unicode(buf, encoding='utf-8')  # if python 2
+                except NameError:
+                    return buf  # if python 3
             else:
                 return buf
         return self._data
@@ -255,8 +261,13 @@ class FilterTool(object):
             data = StringIO(hunk.data())
             for filter in filters:
                 log.debug('Running method "%s" of  %s with kwargs=%s',
-                    type, filter, kwargs_final)
-                out = StringIO(u''.encode('utf-8')) # For 2.x, StringIO().getvalue() returns str
+                          type, filter, kwargs_final)
+                try:
+                    # if python2
+                    # For 2.x, StringIO().getvalue() returns str
+                    out = StringIO(u''.encode('utf-8'))
+                except TypeError:
+                    out = StringIO('')
                 getattr(filter, type)(data, out, **kwargs_final)
                 data = out
                 data.seek(0)

@@ -484,7 +484,15 @@ class ExternalTool(six.with_metaclass(ExternalToolMetaclass, Filter)):
                         buf = data.read()
                     else:
                         buf = data
-                    f.write(buf.encode('utf-8'))
+
+                    try:
+                        if type(buf) is unicode:  # NameError occourd here when python 3
+                            f.write(buf.encode('utf-8'))
+                        else:
+                            f.write(buf)
+                    except NameError:
+                        f.write(buf)  # if python 3
+
                     # No longer pass to stdin
                     data = None
 
