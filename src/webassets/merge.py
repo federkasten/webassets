@@ -16,8 +16,6 @@ from webassets.six.moves import filter
 
 from .utils import cmp_debug_levels, StringIO
 
-import codecs
-
 
 __all__ = ('FileHunk', 'MemoryHunk', 'merge', 'FilterTool',
            'MoreThanOneFilterError', 'NoFilters')
@@ -161,7 +159,6 @@ class MemoryHunk(BaseHunk):
 
     def data(self):
         if hasattr(self._data, 'read'):
-            # return self._data.read()
             buf = self._data.read()
             if type(buf) is str:
                 return unicode(buf, encoding='utf-8')
