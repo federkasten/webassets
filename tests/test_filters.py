@@ -545,12 +545,12 @@ class TestBuiltinFilters(TempEnvironmentHelper):
         self.create_files({'test.pyc':'testing', 'test.py':'blue', 'boo.pyc':'boo'})
         modules = list( unique_modules(self.tempdir))
         assert modules == ['boo','test'],modules
-    
+
     def test_find_packages( self ):
         self.create_files({'moo/__init__.pyc':'testing','voo/__init__.py':'testing'})
         modules = list( unique_modules(self.tempdir))
         assert modules == ['moo','voo'],modules
-        
+
 
 class TestCSSPrefixer(TempEnvironmentHelper):
 
@@ -588,7 +588,7 @@ class TestCoffeeScript(TempEnvironmentHelper):
         self.env.config['COFFEE_NO_BARE'] = True
         self.create_files({'in': "@a = 1"})
         self.mkbundle('in', filters='coffeescript', output='out.js').build()
-        assert self.get('out.js') == '(function() {\n\n  this.a = 1;\n\n}).call(this);\n'
+        assert self.get('out.js') == '(function() {\n  this.a = 1;\n\n}).call(this);\n'
 
         self.env.config['COFFEE_NO_BARE'] = False
         self.create_files({'in': "@a = 1"})
