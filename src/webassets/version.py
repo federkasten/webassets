@@ -159,7 +159,6 @@ class HashVersion(Version):
                 # Can cannot determine the version of placeholder files.
                 raise VersionIndeterminableError(
                     'output target has a placeholder')
-
         hasher = self.hasher()
         hasher.update(hunk.data().encode('utf-8'))
         return hasher.hexdigest()[:self.length]
